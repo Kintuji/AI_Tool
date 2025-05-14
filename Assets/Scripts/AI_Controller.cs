@@ -69,6 +69,8 @@ public class AI_Controller : MonoBehaviour
         //            break;
         //    }
         //}
+
+        //_startState?.Tick
     }
 }
     public enum States
