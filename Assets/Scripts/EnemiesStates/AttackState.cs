@@ -8,16 +8,22 @@ public class AttackState : AI_State
 
     public override void Enter()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public override void Exit()
     {
-        throw new System.NotImplementedException();
+
     }
 
     public override void Tick()
     {
-        throw new System.NotImplementedException();
+        Debug.Log("Attacking...");
+        target = _ai._aiData.Get<Transform>("Target");
+        _distanceToPlayer = Vector3.Distance(_ai.transform.position, target.position);
+        if (_distanceToPlayer > 5.5f)
+        {
+            _stateMachine.ChangeState(States.Chase);
+        }
     }
 }

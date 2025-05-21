@@ -9,6 +9,8 @@ public class AI_StateMachine<TState> where TState : System.Enum
     private AI_State _currentState;
     private readonly AI_Controller _controller;
 
+    public Dictionary<TState, AI_State> States => _states;
+
     public AI_StateMachine(AI_Controller controller) => _controller = controller;
 
     public void AddState(TState stateType, AI_State state)
@@ -28,10 +30,11 @@ public class AI_StateMachine<TState> where TState : System.Enum
         _currentState?.Exit();
         _currentState = _states[stateType];
         _currentState?.Enter();
+        _currentState?.Tick();
     }
 
-    //public void Tick(float deltaTime)
-    //{
-    //    _currentState?.Tick(deltaTime);
-    //}
+    public void Tick()
+    {
+        _currentState?.Tick();
+    }
 }

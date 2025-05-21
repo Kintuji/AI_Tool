@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.AI;
 using static UnityEngine.Analytics.IAnalytic;
 
 public class AI_Controller : MonoBehaviour
@@ -11,17 +12,21 @@ public class AI_Controller : MonoBehaviour
     public AI_Data _aiData { get; private set; }
 
     [Header("AI States Setup")]
-    [SerializeField] private List<States> _activeStates = new();
-    [SerializeField] private States _startState;
+    [SerializeField] private List<States> activeStates = new();
+    [SerializeField] private States startState;
 
-    [SerializeField] private List<int> _changeState = new();
+    private Transform _target;
+    private Rigidbody _rb;
 
     private void Awake()
     {
         _aiData = new AI_Data();
         _stateMachine = new AI_StateMachine<States>(this);
+        _target = GameObject.FindGameObjectWithTag("Player").transform;
+        _aiData.Set("Target", _target);
+        _aiData.Set("Rigidbody", _rb);
 
-        foreach (var state in _activeStates)
+        foreach (var state in activeStates)
         {
             switch (state)
             {
@@ -40,51 +45,42 @@ public class AI_Controller : MonoBehaviour
             }
         }
     }
+
     private void Start()
     {
-        if (_activeStates.Count == 0)
+        if (activeStates.Contains(startState))
         {
-            Debug.LogWarning($"AIController in '{gameObject.name}' has no active states assigned.");
-            return;
+            _stateMachine.ChangeState(startState);
         }
+        else if (activeStates.Count > 0)
+        {
+            _stateMachine.ChangeState(activeStates[0]);
+        }
+        //foreach (var pair in _stateMachine.States)
+        //{
+        //    Debug.Log($"[StateMachine] Key: {pair.Key}, State: {pair.Value.GetType().Name}");
+        //}
+ 
 
-        if (_activeStates.Contains(_startState))
-        {
-            _stateMachine.ChangeState(_startState);
-        }
-        else
-        {
-            Debug.LogWarning($"StartState '{_startState}' not in activeStates. Using first one.");
-            _stateMachine.ChangeState(_activeStates[0]);
-        }
     }
-
     private void Update()
     {
-        //foreach (var events in _changeState)
-        //{
-        //    switch (events)
-        //    {
-        //        case 1:_stateMachine.ChangeState(States.Patrol);
-        //            break;
-        //    }
-        //}
-
-        //_startState?.Tick
+        _stateMachine?.Tick();
     }
 }
     public enum States
-{
-    Idle,
-    Patrol,
-    Chase,
-    Attack,
+    {
+        Idle,
+        Patrol,
+        Chase,
+        Attack,
 
-    Windy,
-    Blue,
-    Storm,
-    Rain,
+        Windy,
+        BlueSky,
+        Storm,
+        Rain,
+        snowing,
 
-    Fleeing,
-    Searching
-}
+        Fleeing,
+        Searching
+    }
