@@ -26,6 +26,9 @@ public class AI_Controller : MonoBehaviour
     [SerializeField] private GameObject rainParticles;
     [SerializeField] private GameObject snowParticles;
 
+    [Header("Patrol Points")]
+    [SerializeField] private List<Transform> patrolPoints = new();
+
     private Transform _target;
     private Rigidbody _rb;
 
@@ -45,7 +48,7 @@ public class AI_Controller : MonoBehaviour
                     _stateMachine.AddState(States.Idle, new IdleState(this, _stateMachine));
                     break;
                 case States.Patrol:
-                    _stateMachine.AddState(States.Patrol, new PatrolState(this, _stateMachine));
+                    _stateMachine.AddState(States.Patrol, new PatrolState(this, _stateMachine, patrolPoints));
                     break;
                 case States.Chase:
                     _stateMachine.AddState(States.Chase, new ChaseState(this, _stateMachine));

@@ -19,7 +19,7 @@ public class IdleState : AI_State
         Debug.Log("Idle: Enter");
         _playerLayer.value = LayerMask.GetMask("Player");
         Rigidbody rb = _ai._aiData.Get<Rigidbody>("_rb");
-        rb.linearVelocity = Vector3.zero;
+      //  rb.linearVelocity = Vector3.zero;
     }
 
     public override void Tick()
@@ -38,7 +38,6 @@ public class IdleState : AI_State
 
     void Search()
     {
-        Debug.Log("Idle: Search");
         Collider[] hitColliders = Physics.OverlapSphere(_ai.transform.position, _maxDistance);
         bool foundPlayer = false;
 
@@ -52,7 +51,6 @@ public class IdleState : AI_State
 
             if (player != null)
             {
-                Debug.Log("teste");
                 RaycastHit hit;
                 if (Physics.Raycast(_ai.transform.position, direction, out hit, _maxDistance, _playerLayer))
                 {
