@@ -15,6 +15,17 @@ public class AI_Controller : MonoBehaviour
     [SerializeField] private List<States> activeStates = new();
     [SerializeField] private States startState;
 
+    [Header("Skyboxs Material")]
+    [SerializeField] private Material windySkybox;
+    [SerializeField] private Material blueSkybox;
+    [SerializeField] private Material stormSkybox;
+    [SerializeField] private Material rainSkybox;
+    [SerializeField] private Material snowSkybox;
+
+    [Header("Particles")]
+    [SerializeField] private GameObject rainParticles;
+    [SerializeField] private GameObject snowParticles;
+
     private Transform _target;
     private Rigidbody _rb;
 
@@ -42,6 +53,16 @@ public class AI_Controller : MonoBehaviour
                 case States.Attack:
                     _stateMachine.AddState(States.Attack, new AttackState(this, _stateMachine));
                     break;
+
+                case States.BlueSky:
+                    _stateMachine.AddState(States.BlueSky, new BlueSky(this, _stateMachine, blueSkybox));
+                    break;
+                case States.Rain:
+                    _stateMachine.AddState(States.Rain, new Rain(this, _stateMachine, rainSkybox, rainParticles));
+                    break;
+                case States.Snow:
+                    _stateMachine.AddState(States.Snow, new Snow(this, _stateMachine, snowSkybox, snowParticles));
+                    break;
             }
         }
     }
@@ -60,8 +81,6 @@ public class AI_Controller : MonoBehaviour
         //{
         //    Debug.Log($"[StateMachine] Key: {pair.Key}, State: {pair.Value.GetType().Name}");
         //}
- 
-
     }
     private void Update()
     {
@@ -79,7 +98,7 @@ public class AI_Controller : MonoBehaviour
         BlueSky,
         Storm,
         Rain,
-        snowing,
+        Snow,
 
         Fleeing,
         Searching

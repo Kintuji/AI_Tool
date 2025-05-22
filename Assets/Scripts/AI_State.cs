@@ -10,6 +10,9 @@ public abstract class AI_State
     protected float _distanceToPlayer;
     protected Transform target;
 
+    protected Material _skyBoxMaterial;
+    protected GameObject _particles;
+
     public AI_State(AI_Controller ai, AI_StateMachine<States> stateMachine)
     {
         _ai = ai;
