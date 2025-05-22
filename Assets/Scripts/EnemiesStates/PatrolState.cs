@@ -24,6 +24,15 @@ public class PatrolState : AI_State
     public override void Tick()
     {
         Move();
+        float distance = Vector3.Distance(_ai.transform.position, target.position);
+        if(distance < 10)
+        {
+            _stateMachine.ChangeState(States.Chase);
+        }
+        else if (distance < 2.5f)
+        {
+            _stateMachine.ChangeState(States.Attack);
+        }
     }
 
     public override void Exit()
